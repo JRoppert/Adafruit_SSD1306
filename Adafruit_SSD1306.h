@@ -18,30 +18,37 @@ All text above, and the splash screen must be included in any redistribution
 #ifndef _Adafruit_SSD1306_H_
 #define _Adafruit_SSD1306_H_
 
-#if ARDUINO >= 100
- #include "Arduino.h"
- #define WIRE_WRITE Wire.write
+#define SPARK_PLATFORM
+
+#if defined(SPARK_PLATFORM)
+ #include "application.h"
 #else
- #include "WProgram.h"
+ #if ARDUINO >= 100
+  #include "Arduino.h"
+  #define WIRE_WRITE Wire.write
+ #else
+  #include "WProgram.h"
   #define WIRE_WRITE Wire.send
-#endif
+ #endif
 
-#if defined(__SAM3X8E__)
- typedef volatile RwReg PortReg;
- typedef uint32_t PortMask;
- #define HAVE_PORTREG
-#elif defined(ARDUINO_ARCH_SAMD)
-// not supported
-#elif defined(ESP8266) || defined(ARDUINO_STM32_FEATHER)
-  typedef volatile uint32_t PortReg;
+ #if defined(__SAM3X8E__)
+  typedef volatile RwReg PortReg;
   typedef uint32_t PortMask;
-#else
-  typedef volatile uint8_t PortReg;
-  typedef uint8_t PortMask;
- #define HAVE_PORTREG
+  #define HAVE_PORTREG
+ #elif defined(ARDUINO_ARCH_SAMD)
+ // not supported
+ #elif defined(ESP8266) || defined(ARDUINO_STM32_FEATHER)
+   typedef volatile uint32_t PortReg;
+   typedef uint32_t PortMask;
+ #else
+   typedef volatile uint8_t PortReg;
+   typedef uint8_t PortMask;
+  #define HAVE_PORTREG
+ #endif
+
+ #include <SPI.h>
 #endif
 
-#include <SPI.h>
 #include <Adafruit_GFX.h>
 
 #define BLACK 0
@@ -66,8 +73,8 @@ All text above, and the splash screen must be included in any redistribution
     SSD1306_96_16
 
     -----------------------------------------------------------------------*/
-//   #define SSD1306_128_64
-   #define SSD1306_128_32
+   #define SSD1306_128_64
+//   #define SSD1306_128_32
 //   #define SSD1306_96_16
 /*=========================================================================*/
 
